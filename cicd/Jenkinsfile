@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps { git 'https://github.com/user/flask-app-devops.git' }
+        }
+        stage('Build') {
+            steps { sh 'docker build -t user/flask-app:latest ./app' }
+        }
+        stage('Push') {
+            steps { sh 'docker push user/flask-app:latest' }
+        }
+        stage('Deploy') {
+            steps { sh 'kubectl apply -f ./k8s/' }
+        }
+    }
+}
+
